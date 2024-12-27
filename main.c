@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 20
 
 void read_sensor_data(uint16_t *data) {
     for (int i = 0; i < BUFFER_SIZE; i++) { // Use < instead of <=
