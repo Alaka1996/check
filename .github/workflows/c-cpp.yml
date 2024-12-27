@@ -1,0 +1,46 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the code
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Step 2: Install Build Essentials
+    - name: Install GCC and Make
+      run: sudo apt-get update && sudo apt-get install -y build-essential
+
+    # Step 3: Build the Project
+    - name: Build the Project
+      run: |
+        make clean
+        make VERBOSE=1
+
+    # Step 4: Run the Main Program
+    - name: Run Main Program
+      run: ./bin/sensor_program > test_output.txt
+
+    # Step 5: Run Unit Tests
+    - name: Run Unit Tests
+      run: ./bin/test_sensor
+
+    # Step 6: Display Output
+    - name: Display Program Output
+      run: cat test_output.txt
+
+    # Step 7: Check for Warnings
+    - name: Check for Warnings
+      run: |
+        if grep -q "Warning:" test_output.txt; then
+          echo "Warnings found in output!"
+          exit 1
+        fi
